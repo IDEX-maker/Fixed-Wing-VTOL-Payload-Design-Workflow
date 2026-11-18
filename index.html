@@ -2,11 +2,6 @@
    <html lang="en" class="dark">
    <head>
      <meta charset="UTF-8" />
-    if (event.target && (event.target.isContentEditable || event.target.hasAttribute('contenteditable'))) {
-      const clonedDoc = document.cloneNode(true);
-      const injectedScripts = clonedDoc.querySelectorAll('[data-bard-client-injected="true"]');
-      injectedScripts.forEach(el => el.remove());
-      window.parent.postMessage({
         type: 'inlineEdit',
         html: '<!DOCTYPE html>\n' + clonedDoc.documentElement.outerHTML
       }, '*');
