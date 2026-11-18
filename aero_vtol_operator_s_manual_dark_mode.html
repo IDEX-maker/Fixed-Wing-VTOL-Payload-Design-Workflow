@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>AERO-VTOL QuadPlane Studio — Operator's Manual & Technical Reference Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- KaTeX for crisp aerospace mathematical formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}] });"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+    html {
+      scroll-behavior: smooth;
+      font-family: 'Inter', sans-serif;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    body {
+      background-color: #020617;
+      color: #e2e8f0;
+      background-image:
+        radial-gradient(circle at 15% 10%, rgba(14, 165, 233, 0.08), transparent 35%),
+        radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.06), transparent 35%);
+    }
+    html.light-theme {
+      color-scheme: light;
+    }
+    html.light-theme body {
+      background-color: #f8fafc;
+      color: #0f172a;
+      background-image: none;
+    }
+    html.light-theme .doc-card {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+    html.light-theme .doc-subcard {
+      background-color: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+    }
+    html.light-theme .doc-sidebar {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+    }
+    html.light-theme .text-slate-100,
+    html.light-theme .text-white {
+      color: #0f172a !important;
+    }
+    html.light-theme .text-slate-300,
+    html.light-theme .text-slate-400 {
+      color: #475569 !important;
+    }
+    .math-box {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-left: 4px solid #38bdf8;
+      border-radius: 0.75rem;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+    }
+    html.light-theme .math-box {
+      background: #f0f9ff;
+      border-color: #bae6fd;
+      border-left-color: #0284c7;
+      color: #0f172a;
+    }
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-sky-500/30 selection:text-sky-200">
+
+  <!-- Sticky Top Command Header -->
+  <header class="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-sky-500/15 border border-sky-400/40 flex items-center justify-center text-sky-400 shadow-inner">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-sm sm:text-base font-extrabold tracking-tight text-white">AERO-VTOL QuadPlane Studio — Operator’s Manual</h1>
+            <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-400/30">REV 5 · DARK EDITION</span>
+          </div>
+          <p class="text-xs text-slate-400">Technical Reference Guide · Aerospace Equations, Worked Examples, Kobra S1 Max Slicing &amp; 116 Component Suppliers</p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2 no-print">
+        <button type="button" onclick="downloadThisHtmlManual()" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white flex items-center gap-1.5 shadow-sm transition">
+          <span>⬇ Download .HTML Manual</span>
+        </button>
+        <button type="button" onclick="downloadMarkdownManual()" class="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white flex items-center gap-1.5 shadow-sm transition">
+          <span>⬇ Download .MD Manual</span>
+        </button>
+        <button type="button" onclick="toggleManualTheme()" id="themeBtn" class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-semibold text-amber-300 flex items-center gap-1.5 transition">
+          <span id="themeIcon">☀️</span>
+          <span id="themeText">Switch to Light Mode</span>
+        </button>
+        <button type="button" onclick="window.print()" class="px-3 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-xs font-semibold text-white flex items-center gap-1.5 shadow-sm transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
+          <span>Print / Save PDF</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Layout Grid -->
+  <div class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+    <!-- Left Sticky Table of Contents Sidebar -->
+    <aside class="lg:col-span-3 lg:sticky lg:top-20 doc-sidebar bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-3 no-print">
+      <div class="text-xs font-bold uppercase tracking-wider text-sky-400 font-mono">Manual Contents</div>
+      <nav class="space-y-1 text-xs">
+        <a href="#sec-1" class="block px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">1. System Overview &amp; Capabilities</a>
+        <a href="#sec-2" class="block px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">2. Interface &amp; Theme Controls</a>
+        <a href="#sec-3" class="block px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">3. 5-Step Operating Procedure</a>
+        <a href="#sec-4" class="block px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">4. Aerospace Physics &amp; Equations</a>
+        <a href="#sec-5" class="block px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">5. Worked Operational Examples</a>
+        <a href="#sec-6" class="block px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">6. Kobra S1 Max 3D Slicing Guide</a>
+        <a href="#sec-7" class="block px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">7. PX4 SITL &amp; Controller Setup</a>
+        <a href="#sec-8" class="block px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">8. Interactive Pre-Flight Checklist</a>
+        <a href="#sec-9" class="block px-3 py-2 rounded-lg hover:bg-slate-800 text-amber-300 hover:text-white font-semibold transition">9. Component Suppliers Directory (20 Categories)</a>
+      </nav>
+      <div class="pt-2 border-t border-slate-800 text-[11px] font-mono text-slate-400 space-y-1">
+        <div><span class="text-slate-500">Doc ID:</span> AERO-VTOL-MAN-2026</div>
+        <div><span class="text-slate-500">Printer:</span> Kobra S1 Max ($350^3\text{ mm}$)</div>
+        <div><span class="text-slate-500">PX4:</span> v1.14 – v1.17+ (`13000`)</div>
+      </div>
+    </aside>
+
+    <!-- Right Main Technical Documentation Content -->
+    <main class="lg:col-span-9 space-y-8">
+
+      <!-- Hero Metadata Banner -->
+      <section class="doc-card bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4 mb-4">
+          <div>
+            <span class="text-xs font-mono uppercase tracking-widest text-sky-400">Official Operator's Reference Manual</span>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-white mt-1">Fixed-Wing Lift-and-Cruise VTOL Design &amp; Manufacturing Workflow</h2>
+          </div>
+          <div class="flex flex-wrap gap-2 text-xs font-mono">
+            <span class="px-3 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">FAA CG / CL Compliant</span>
+            <span class="px-3 py-1 rounded-lg bg-purple-500/15 text-purple-300 border border-purple-500/30">BEMT Custom Propellers</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
+          <div class="doc-subcard bg-slate-950/80 border border-slate-800 rounded-xl p-3">
+            <div class="text-slate-400">Target Airframe</div>
+            <div class="font-bold text-white mt-0.5">QuadPlane / Octo-Quad</div>
+          </div>
+          <div class="doc-subcard bg-slate-950/80 border border-slate-800 rounded-xl p-3">
+            <div class="text-slate-400">3D Build Volume</div>
+            <div class="font-bold text-sky-300 mt-0.5">$350 \times 350 \times 350\text{ mm}$</div>
+          </div>
+          <div class="doc-subcard bg-slate-950/80 border border-slate-800 rounded-xl p-3">
+            <div class="text-slate-400">Optical Flow / ToF</div>
+            <div class="font-bold text-emerald-300 mt-0.5">MicoAir MTF-02 / 02P</div>
+          </div>
+          <div class="doc-subcard bg-slate-950/80 border border-slate-800 rounded-xl p-3">
+            <div class="text-slate-400">CAD &amp; CFD Formats</div>
+            <div class="font-bold text-amber-300 mt-0.5">.STL · .STEP · .X_T · .DAT</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 1: System Overview & Complete Capability Matrix -->
+      <section id="sec-1" class="doc-card bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 font-mono text-xs font-bold">SECTION 01</span>
+          <h3 class="text-lg font-bold text-white">System Overview &amp; Complete Capability Matrix</h3>
+        </div>
+        <p class="text-sm text-slate-300 leading-relaxed">
+          <strong>AERO-VTOL QuadPlane Studio</strong> is a self-contained parametric aerospace design, structural analysis, additive manufacturing segmentation, and autopilot configuration suite. Every input adjustment triggers a real-time recalculation across <strong>15 integrated engineering modules</strong>:
+        </p>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-800">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-950 text-sky-300 font-mono border-b border-slate-800">
+                <th class="py-3 px-3.5">#</th>
+                <th class="py-3 px-3.5">Engineering Module</th>
+                <th class="py-3 px-3.5">Key Outputs &amp; Functional Capabilities</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/80 text-slate-300">
+              <tr class="hover:bg-slate-800/40"><td class="py-2.5 px-3.5 font-mono text-sky-400">01</td><td class="py-2.5 px-3.5 font-bold text-white">ISA Altitude &amp; Cold-Weather Derating</td><td class="py-2.5 px-3.5">Computes air density $\rho$ from ISA barometric laws ($0–4,500\text{ m}$ ASL, $-35^\circ\text{C}\text{ to }+45^\circ\text{C}$) and applies automatic sub-zero battery capacity derating up to $30\%$.</td></tr>
+              <tr class="hover:bg-slate-800/40"><td class="py-2.5 px-3.5 font-mono text-sky-400">02</td><td class="py-2.5 px-3.5 font-bold text-white">5-Airfoil High-Lift Aerodynamic Solver</td><td class="py-2.5 px-3.5">Supports <strong>Selig SG6043</strong>, <strong>SD7062</strong>, <strong>NACA 2412</strong>, <strong>Clark-Y</strong>, and <strong>Eppler E423</strong>. Solves wingspan $b$, root/tip chord, $\text{MAC}$, stall speed $V_{\text{stall}}$, Reynolds number $\text{Re}$, Mach, and $L/D$.</td></tr>
+              <tr class="hover:bg-slate-800/40"><td class="py-2.5 px-3.5 font-mono text-sky-400">03</td><td class="py-2.5 px-3.5 font-bold text-white">Carbon Spar Bending &amp; Shear Sizing</td><td class="py-2.5 px-3.5">Calculates root bending moment $M_{\text{root}}$ at ultimate load factor $n_{\text{ult}}$ ($2.0\text{G}–6.0\text{G}$), selects 3K roll-wrapped carbon tube diameter ($\varnothing 18–24\text{ mm}$), and verifies Safety Factor ($\text{SF}$).</td></tr>
+              <tr class="hover:bg-slate-800/40"><td class="py-2.5 px-3.5 font-mono text-sky-400">04</td><td class="py-2.5 px-3.5 font-bold text-white">Control Surface &amp; Servo Torque Sizing</td><td class="py-2.5 px-3.5">Sizes aileron ($22\%\text{ MAC}$) and elevator ($28\%\text{ tail chord}$) chords and computes minimum metal-gear servo stall torque ($\text{kg}\cdot\text{cm}$).</td></tr>
+              <tr class="hover:bg-slate-800/40"><td class="py-2.5 px-3.5 font-mono text-sky-400">05</td><td class="py-2.5 px-3.5 font-bold text-white">Motor, ESC &amp; Battery Recommender</td><td class="py-2.5 px-3.5">Matches commercial brushless motors (<strong>T-Motor MN4014 / MN5008 / AT3520 / AT4120</strong>, <strong>Hobbywing XRotor</strong>, <strong>SunnySky</strong>, <strong>Dualsky</strong>), BLHeli_32 ESCs, and <strong>Molicel P45B Li-Ion</strong> or <strong>LiPo</strong> packs.</td></tr>
+              <tr class="hover:bg-slate-800/40"><td class="py-2.5 px-3.5 font-mono text-sky-400">06</td><td class="py-2.5 px-3.5 font-bold text-white">OTS Market + Custom BEMT Propellers</td><td class="py-2.5 px-3.5">Recommends primary + 3 backup commercial propellers OR generates custom 2/3-blade <strong>Blade Element Momentum Theory (BEMT)</strong> 3D-printed propellers in watertight `.STL` and `.STEP`.</td></tr>
+              <tr class="hover:bg-slate-800/40"><td class="py-2.5 px-3.5 font-mono text-sky-400">07</td><td class="py-2.5 px-3.5 font-bold text-white">Transition Energy &amp; Distance Corridor</td><td class="py-2.5 px-3.5">Computes transition speed ($1.25\,V_{\text{stall}}$), acceleration time, forward transition distance, energy ($\text{Wh}$), and back-transition braking flare distance.</td></tr>
+              <tr class="hover:bg-slate-800/40"><td class="py-2.5 px-3.5 font-mono text-sky-400">08</td><td class="py-2.5 px-3.5 font-bold text-white">Propeller-to-Wing &amp; Pod Clearance</td><td class="py-2.5 px-3.5">Positions twin carbon booms spanwise to clear the external payload pod and extends boom length so rotor tips clear wing leading/trailing edges by $>25\text{ mm}$.</td></tr>
+              <tr class="hover:bg-slate-800/40"><td class="py-2.5 px-3.5 font-mono text-sky-400">09</td><td class="py-2.5 px-3.5 font-bold text-white">FAA CG vs. CL/AC, NP &amp; VTOL CoT</td><td class="py-2.5 px-3.5">Interactive side-profile balance diagram with $\pm 80\text{ mm}$ battery trim slider and payload release toggle. Tracks $\text{CG}$, $\text{AC}$ ($25\%\text{ MAC}$), $\text{NP}$ ($39\%\text{ MAC}$), Static Margin, and hover thrust split.</td></tr>
+              <tr class="hover:bg-slate-800/40"><td class="py-2.5 px-3.5 font-mono text-sky-400">10</td><td class="py-2.5 px-3.5 font-bold text-white">Avionics &amp; MicoAir MTF-02/02P Placement</td><td class="py-2.5 px-3.5">Computes exact longitudinal mounting stations ($X\text{ mm}$ from nose datum) for Battery, PX4 FC, ESCs, GNSS mast, RC receiver, Pitot, and <strong>MicoAir MTF-02 / MTF-02P</strong> Optical Flow + ToF rangefinder.</td></tr>
+              <tr class="hover:bg-slate-800/40"><td class="py-2.5 px-3.5 font-mono text-sky-400">11</td><td class="py-2.5 px-3.5 font-bold text-white">Anycubic Kobra S1 Max CAD Exporter</td><td class="py-2.5 px-3.5">Auto-segments wings, fuselage bays, tailplanes, motor mounts, and payload pods to fit inside $350 \times 350 \times 350\text{ mm}$ plates in Binary `.STL`, Parasolid `.X_T`, STEP `AP214`, and cosine-spaced `.DAT`.</td></tr>
+              <tr class="hover:bg-slate-800/40"><td class="py-2.5 px-3.5 font-mono text-sky-400">12</td><td class="py-2.5 px-3.5 font-bold text-white">Interactive BOM (.CSV) &amp; Wire Gauge</td><td class="py-2.5 px-3.5">Generates a downloadable `.CSV` Bill of Materials with AWG wire harness sizing (`10 AWG` main bus, `12 AWG` pusher, `14 AWG` booms) and PX4 port mapping.</td></tr>
+              <tr class="hover:bg-slate-800/40"><td class="py-2.5 px-3.5 font-mono text-sky-400">13</td><td class="py-2.5 px-3.5 font-bold text-white">XFLR5, OpenFOAM &amp; MIT AVL CFD Suite</td><td class="py-2.5 px-3.5">Exports Plane `.xml` + `.dat` for XFLR5/Flow5, meter-scaled watertight `.stl` + boundary conditions for OpenFOAM/SimScale, and `.avl` + `.mass` for MIT AVL.</td></tr>
+              <tr class="hover:bg-slate-800/40"><td class="py-2.5 px-3.5 font-mono text-sky-400">14</td><td class="py-2.5 px-3.5 font-bold text-white">PX4 Gazebo SITL &amp; Controller Mapping</td><td class="py-2.5 px-3.5">Generates `quadplane_vtol.params` (`SYS_AUTOSTART 13000` + MTF-02P EKF2 parameters) and setup guides for <strong>Xbox Series X|S</strong>, <strong>RadioLink T16D</strong>, <strong>FlySky FS-i6X</strong>, and <strong>Spektrum DX6i</strong>.</td></tr>
+              <tr class="hover:bg-slate-800/40"><td class="py-2.5 px-3.5 font-mono text-sky-400">15</td><td class="py-2.5 px-3.5 font-bold text-white">Dark/Light Mode, Tablet Share &amp; GitHub</td><td class="py-2.5 px-3.5">Persistent Light/Dark mode (`localStorage`), native iPadOS/Android Share Sheet export, and 1-Click browser-to-GitHub REST API repository publishing.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 2: Interface Navigation & Theme Controls -->
+      <section id="sec-2" class="doc-card bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 font-mono text-xs font-bold">SECTION 02</span>
+          <h3 class="text-lg font-bold text-white">Interface Navigation &amp; Theme Controls</h3>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="doc-subcard bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-2">
+            <div class="font-bold text-amber-300 font-mono">Top Global Command Bar</div>
+            <ul class="space-y-1.5 text-slate-300 list-disc pl-4">
+              <li><strong>`🌙 Dark Mode` / `☀️ Light Mode`:</strong> Toggles high-contrast Slate Dark Mode or outdoor Light Mode and persists in `localStorage`.</li>
+              <li><strong>`Structures, BOM & Powertrain`:</strong> Opens the carbon spar stress verification, downloadable `.CSV` BOM, AWG wire table, and PX4 pinout matrix.</li>
+              <li><strong>`CFD & Flight Dynamics`:</strong> Exports XFLR5/Flow5, OpenFOAM/SimScale, and MIT AVL verification packages.</li>
+              <li><strong>`PX4 SITL Sim`:</strong> Configures `quadplane_vtol.params` and QGroundControl joysticks/transmitters.</li>
+              <li><strong>`CAD / STL / DAT`:</strong> Opens the Anycubic Kobra S1 Max build-plate manager.</li>
+            </ul>
+          </div>
+          <div class="doc-subcard bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-2">
+            <div class="font-bold text-sky-300 font-mono">1-Click Mission Presets</div>
+            <ul class="space-y-1.5 text-slate-300 list-disc pl-4">
+              <li><strong>Mapping &amp; Survey (1.2 kg):</strong> $0.65\text{ kg}$ internal + $0.55\text{ kg}$ external pod, Selig SG6043 airfoil, $70\text{ km/h}$ cruise, 6S2P Li-Ion.</li>
+              <li><strong>Tactical Cargo Drop (2.5 kg):</strong> $0.65\text{ kg}$ internal + $1.85\text{ kg}$ drop pod, thick Selig-Donovan SD7062 airfoil, $4.0\text{G}$ load factor, 8S2P Li-Ion.</li>
+              <li><strong>Long-Endurance Recon (1.0 kg):</strong> $0.75\text{ kg}$ internal + $0.25\text{ kg}$ pod, $\text{AR } 10.2$, $66\text{ km/h}$ cruise, $2.15\times$ high-altitude hover margin.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: 5-Step Operating Procedure -->
+      <section id="sec-3" class="doc-card bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-xl">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 font-mono text-xs font-bold">SECTION 03</span>
+          <h3 class="text-lg font-bold text-white">Step-by-Step Standard Operating Procedure (5-Step Wizard)</h3>
+        </div>
+
+        <div class="space-y-3 text-xs">
+          <div class="doc-subcard bg-slate-950/80 border border-slate-800 rounded-xl p-4">
+            <div class="font-mono font-bold text-sky-400 text-sm mb-1">STEP 01 · Payload &amp; Mission Requirements</div>
+            <p class="text-slate-300 leading-relaxed">
+              Enter <strong>Internal Bay Payload ($\text{kg}$)</strong>, <strong>External Drop Payload ($\text{kg}$)</strong>, and <strong>External Pod Dimensions $L \times W \times H$ ($\text{mm}$)</strong>. The solver automatically adjusts the fuselage length and widens the spanwise VTOL boom spacing so propellers clear the external pod. Set <strong>Target Cruise Speed ($\text{km/h}$)</strong>, <strong>Design Altitude ASL ($\text{m}$)</strong>, and <strong>Ambient Temp ($^\circ\text{C}$)</strong> to establish the ISA atmospheric density $\rho$ and cold-weather battery derating.
+            </p>
+          </div>
+
+          <div class="doc-subcard bg-slate-950/80 border border-slate-800 rounded-xl p-4">
+            <div class="font-mono font-bold text-emerald-400 text-sm mb-1">STEP 02 · Wing, Airfoil &amp; Carbon Spar Sizing</div>
+            <p class="text-slate-300 leading-relaxed">
+              Select from five proven low-Reynolds airfoils (<strong>SG6043</strong>, <strong>SD7062</strong>, <strong>NACA 2412</strong>, <strong>Clark-Y</strong>, or <strong>Eppler E423</strong>). Tune <strong>Target Wing Loading ($\text{g/dm}^2$)</strong>, <strong>Aspect Ratio ($\text{AR}$)</strong>, <strong>Taper Ratio ($\lambda$)</strong>, <strong>Tip Washout ($^\circ$)</strong>, and <strong>Ultimate Pull-Up Load Factor ($G$)</strong>. Verify in the live structural card that the selected 3K carbon main spar ($\varnothing 18–24\text{ mm}$) maintains a Safety Factor $\text{SF} > 2.0\times$.
+            </p>
+          </div>
+
+          <div class="doc-subcard bg-slate-950/80 border border-slate-800 rounded-xl p-4">
+            <div class="font-mono font-bold text-amber-400 text-sm mb-1">STEP 03 · VTOL Propulsion &amp; Propeller Suite</div>
+            <p class="text-slate-300 leading-relaxed">
+              Choose <strong>QuadPlane (4 Lift Motors)</strong> or <strong>Coaxial Octo-QuadPlane (8 Motors)</strong>, <strong>Hover Thrust-to-Weight ($\text{T/W}$)</strong>, and <strong>Battery Chemistry</strong> (`6S2P Li-Ion`, `8S2P Li-Ion`, or `6S LiPo`). Select between <strong>Off-the-Shelf Commercial Propellers</strong> (with 3 market alternatives per rotor) and <strong>Custom BEMT 3D-Printed Propellers</strong> (click <em>Propeller Alternatives &amp; Custom CAD →</em> to export `.STL` and `.STEP` files for CW/CCW hover and pusher propellers).
+            </p>
+          </div>
+
+          <div class="doc-subcard bg-slate-950/80 border border-slate-800 rounded-xl p-4">
+            <div class="font-mono font-bold text-purple-400 text-sm mb-1">STEP 04 · FAA CG vs. Center of Lift (CL), Sensor Placement &amp; PX4</div>
+            <p class="text-slate-300 leading-relaxed">
+              Use the <strong>Battery Fore/Aft Trim Offset Slider ($\pm 80\text{ mm}$)</strong> and toggle <strong>Ext. Payload Attached</strong> while inspecting the live side-profile balance diagram. Verify that $\text{CG}$ stays ahead of the Neutral Point ($\text{NP} = 39\%\text{ MAC}$) with a <strong>Static Margin of $8\%–15\%\text{ MAC}$</strong> both before and after cargo drop. Select your <strong>MicoAir MTF-02P / MTF-02</strong> optical flow sensor and inspect the EMI-isolated mounting coordinates ($X\text{ mm}$ from the nose tip).
+            </p>
+          </div>
+
+          <div class="doc-subcard bg-slate-950/80 border border-slate-800 rounded-xl p-4">
+            <div class="font-mono font-bold text-cyan-400 text-sm mb-1">STEP 05 · Manufacturing, PX4 SITL &amp; CFD Export Hub</div>
+            <p class="text-slate-300 leading-relaxed">
+              Download the complete <strong>Anycubic Kobra S1 Max `.ZIP` bundle</strong> (all segmented `.STL` plates, `.X_T`, `.STEP`, `.DAT` airfoil curves, custom BEMT propellers, `quadplane_vtol.params`, and `spec.json`), export CFD/stability bundles, download the `.CSV` Bill of Materials, or push directly to GitHub.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: Deep-Dive Aerospace Equations -->
+      <section id="sec-4" class="doc-card bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-xl">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 font-mono text-xs font-bold">SECTION 04</span>
+          <h3 class="text-lg font-bold text-white">Deep-Dive Engineering Modules &amp; Mathematical Formulations</h3>
+        </div>
+
+        <div class="space-y-4 text-xs">
+          <div>
+            <h4 class="font-bold text-sky-300 mb-1.5">4.1 ISA Atmospheric Density &amp; Cold-Weather Battery Derating</h4>
+            <p class="text-slate-300 mb-2">At design altitude $h$ ($\text{m}$ ASL) and ambient temperature $T_{\text{amb}}$ ($^\circ\text{C}$), air density $\rho$ and sub-zero usable battery energy $E_{\text{usable}}$ are solved as:</p>
+            <div class="math-box">
+              $$T_K = T_{\text{amb}} + 273.15, \qquad P = 101325 \left(1 - \frac{0.0065 \, h}{288.15}\right)^{5.255} \text{ [Pa]}, \qquad \rho = \frac{P}{287.05 \, T_K} \text{ [kg/m}^3\text{]}$$
+              $$\eta_{\text{temp}} = \min\left(0.30,\; 0.009 \, |T_{\text{amb}}|\right) \text{ for } T_{\text{amb}} < 0^\circ\text{C}, \qquad E_{\text{usable}} = 0.85 \, E_{\text{nominal}} \left(1 - \eta_{\text{temp}}\right)$$
+            </div>
+          </div>
+
+          <div>
+            <h4 class="font-bold text-emerald-300 mb-1.5">4.2 Wing Planform, Stall Speed, Transition Corridor &amp; Cruise L/D</h4>
+            <p class="text-slate-300 mb-2">Given Maximum Takeoff Weight $\text{MTOW}$ ($\text{kg}$), wing loading $W/S$ ($\text{g/dm}^2$), aspect ratio $\text{AR}$, and taper ratio $\lambda = c_t / c_r$:</p>
+            <div class="math-box">
+              $$S = \frac{\text{MTOW} \times 10}{W/S} \text{ [m}^2\text{]}, \qquad b = \sqrt{S \cdot \text{AR}} \text{ [m]}, \qquad c_r = \frac{2S}{b(1 + \lambda)}, \qquad \text{MAC} = \frac{2}{3} c_r \left(\frac{1 + \lambda + \lambda^2}{1 + \lambda}\right)$$
+              $$V_{\text{stall}} = \sqrt{\frac{2 \, \text{MTOW} \, g}{\rho \, S \, C_{L,\max}}}, \qquad V_{\text{trans}} = 1.25 \, V_{\text{stall}}, \qquad \frac{L}{D} = \frac{C_{L,\text{cruise}}}{C_{D0} + \frac{C_{L,\text{cruise}}^2}{\pi \, \text{AR} \, e} + 0.008}$$
+            </div>
+          </div>
+
+          <div>
+            <h4 class="font-bold text-amber-300 mb-1.5">4.3 Carbon Main Spar Root Bending Stress &amp; Safety Factor</h4>
+            <p class="text-slate-300 mb-2">Under ultimate pull-up load factor $n_{\text{ult}}$, root bending moment $M_{\text{root}}$, tube moment of inertia $I$, peak stress $\sigma_{\max}$, and Safety Factor ($\text{SF}$ against $\sigma_{\text{ult}} = 650\text{ MPa}$) are:</p>
+            <div class="math-box">
+              $$M_{\text{root}} = \left(\frac{\text{MTOW} \cdot g \cdot n_{\text{ult}}}{2}\right) \left(0.42 \, \frac{b}{2}\right), \qquad I = \frac{\pi}{64}\left(D_o^4 - D_i^4\right), \qquad \sigma_{\max} = \frac{M_{\text{root}}(D_o/2)}{I}, \qquad \text{SF} = \frac{650\text{ MPa}}{\sigma_{\max}/10^6}$$
+            </div>
+          </div>
+
+          <div>
+            <h4 class="font-bold text-purple-300 mb-1.5">4.4 FAA Longitudinal Stability (CG, Aerodynamic Center &amp; Neutral Point) &amp; BEMT Blade Twist</h4>
+            <div class="math-box">
+              $$X_{\text{AC}} = X_{\text{LE}} + 0.25\,\text{MAC}, \qquad X_{\text{NP}} = X_{\text{LE}} + 0.39\,\text{MAC}, \qquad \text{SM} = \frac{X_{\text{NP}} - X_{\text{CG}}}{\text{MAC}} \times 100\%$$
+              $$\beta(r) = \arctan\left(\frac{P_{\text{geom}}}{2 \pi r}\right), \qquad c(r) = 0.22 R \sin\left(\pi \left(\frac{r}{R}\right)^{0.75}\right) + 7\text{ mm}$$
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 5: Worked Operational Examples -->
+      <section id="sec-5" class="doc-card bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-xl">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 font-mono text-xs font-bold">SECTION 05</span>
+          <h3 class="text-lg font-bold text-white">Worked Operational Examples (End-to-End Walkthroughs)</h3>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 text-xs">
+          <div class="doc-subcard bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-2">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="font-mono font-bold text-sky-300 text-sm">Example A · Photogrammetry Mapping &amp; LiDAR Survey (1.2 kg Payload)</span>
+              <span class="px-2.5 py-0.5 rounded bg-sky-500/20 text-sky-300 font-mono">Preset: Mapping &amp; Survey</span>
+            </div>
+            <p class="text-slate-300">Carries a $0.65\text{ kg}$ Sony ILX-LR1 internal camera + $0.55\text{ kg}$ nadir LiDAR pod ($190 \times 110 \times 85\text{ mm}$) at $700\text{ m}$ ASL, $15^\circ\text{C}$.</p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono pt-1">
+              <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800"><div class="text-slate-400">MTOW / Span</div><div class="text-white font-bold">4.83 kg / 2483 mm</div></div>
+              <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800"><div class="text-slate-400">Spar / Safety</div><div class="text-emerald-300 font-bold">Ø20×18 mm (SF 3.9×)</div></div>
+              <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800"><div class="text-slate-400">VTOL / Pusher</div><div class="text-amber-300 font-bold">4× MN4014 + AT3520</div></div>
+              <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800"><div class="text-slate-400">Endurance / SM</div><div class="text-sky-300 font-bold">68 min · SM 11.4%</div></div>
+            </div>
+          </div>
+
+          <div class="doc-subcard bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-2">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="font-mono font-bold text-emerald-300 text-sm">Example B · Tactical Heavy Cargo Drop Mission (2.5 kg Total Payload)</span>
+              <span class="px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono">Preset: Tactical Cargo Drop</span>
+            </div>
+            <p class="text-slate-300">Delivers a $1.85\text{ kg}$ external emergency medical pod ($260 \times 140 \times 115\text{ mm}$) + $0.65\text{ kg}$ internal avionics at $4.0\text{G}$ ultimate load factor.</p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono pt-1">
+              <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800"><div class="text-slate-400">MTOW / Airfoil</div><div class="text-white font-bold">6.14 kg / SD7062</div></div>
+              <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800"><div class="text-slate-400">Heavy Powertrain</div><div class="text-amber-300 font-bold">4× MN5008 + AT4120</div></div>
+              <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800"><div class="text-slate-400">Props &amp; Battery</div><div class="text-sky-300 font-bold">17×6.0" CF · 8S2P</div></div>
+              <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800"><div class="text-slate-400">Drop CG Shift</div><div class="text-emerald-300 font-bold">2.2% MAC (SAFE)</div></div>
+            </div>
+          </div>
+
+          <div class="doc-subcard bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-2">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="font-mono font-bold text-purple-300 text-sm">Example C · Cold-Weather High-Altitude Recon (-15 °C @ 1,800 m ASL)</span>
+              <span class="px-2.5 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono">Custom BEMT 3D-Printed Props</span>
+            </div>
+            <p class="text-slate-300">Sub-zero winter reconnaissance at $1,800\text{ m}$ ASL ($-15^\circ\text{C}$) using custom 3-blade PAHT-CF 3D-printed propellers exported in `.STL` and `.STEP`.</p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono pt-1">
+              <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800"><div class="text-slate-400">Thermal Derate</div><div class="text-amber-300 font-bold">-15°C · 14% Derate</div></div>
+              <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800"><div class="text-slate-400">Hover T/W Margin</div><div class="text-white font-bold">2.15× High-Alt</div></div>
+              <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800"><div class="text-slate-400">Custom Hover Prop</div><div class="text-purple-300 font-bold">3-Blade 15×5.2"</div></div>
+              <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800"><div class="text-slate-400">Optical Flow</div><div class="text-sky-300 font-bold">MTF-02P @ X=700mm</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 6: Anycubic Kobra S1 Max Slicing Protocol -->
+      <section id="sec-6" class="doc-card bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 font-mono text-xs font-bold">SECTION 06</span>
+          <h3 class="text-lg font-bold text-white">3D Printing &amp; Slicing Protocol (Anycubic Kobra S1 Max)</h3>
+        </div>
+        <div class="overflow-x-auto rounded-xl border border-slate-800">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-950 text-sky-300 font-mono border-b border-slate-800">
+                <th class="py-2.5 px-3">Part Plate Group</th>
+                <th class="py-2.5 px-3">Filament</th>
+                <th class="py-2.5 px-3">Nozzle / Layer</th>
+                <th class="py-2.5 px-3">Walls / Infill</th>
+                <th class="py-2.5 px-3">Joinery &amp; Post-Processing</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/80 text-slate-300">
+              <tr><td class="py-2.5 px-3 font-bold text-white">Wing Panels (`P1–P4`)</td><td class="py-2.5 px-3 font-mono text-emerald-300">Foaming LW-PLA</td><td class="py-2.5 px-3 font-mono">0.4 / 0.24 mm</td><td class="py-2.5 px-3 font-mono">1 Wall · 3% Gyroid</td><td class="py-2.5 px-3">Slide over continuous $\varnothing 18–20\text{ mm}$ 3K carbon spar (`+0.20 mm` radial clearance); bond mating ribs with medium CA.</td></tr>
+              <tr><td class="py-2.5 px-3 font-bold text-white">Fuselage Bays (`P5–P8`)</td><td class="py-2.5 px-3 font-mono text-sky-300">PETG-CF / LW-PLA</td><td class="py-2.5 px-3 font-mono">0.4 / 0.20 mm</td><td class="py-2.5 px-3 font-mono">2 Walls · 8% Gyroid</td><td class="py-2.5 px-3">Align interlocking shear pins (`0.25 mm` tolerance) and reinforce battery tray with $6\text{ mm}$ pultruded carbon strips.</td></tr>
+              <tr><td class="py-2.5 px-3 font-bold text-white">VTOL Motor Mounts (`P9`)</td><td class="py-2.5 px-3 font-mono text-amber-300">PAHT-CF / PETG-CF</td><td class="py-2.5 px-3 font-mono">0.4 / 0.16 mm</td><td class="py-2.5 px-3 font-mono">4 Walls · 35% Cubic</td><td class="py-2.5 px-3">Install M3 brass heat-set inserts (`Ø4.6 mm` bore) and torque boom clamp screws with blue threadlocker.</td></tr>
+              <tr><td class="py-2.5 px-3 font-bold text-white">Custom BEMT Propellers</td><td class="py-2.5 px-3 font-mono text-purple-300">PAHT-CF (Carbon Nylon)</td><td class="py-2.5 px-3 font-mono">0.4 / 0.12 mm</td><td class="py-2.5 px-3 font-mono">4 Walls · 100% Concentric</td><td class="py-2.5 px-3">Print at $45^\circ$ orientation, anneal at $80^\circ\text{C}$ for 2 hrs, wet-sand with 600-grit paper, and dynamically balance before flight.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 7: PX4 SITL Simulation & Controller Setup -->
+      <section id="sec-7" class="doc-card bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 font-mono text-xs font-bold">SECTION 07</span>
+          <h3 class="text-lg font-bold text-white">PX4 SITL Simulation &amp; Controller Setup Guide</h3>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="doc-subcard bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-2">
+            <div class="font-bold text-emerald-300 font-mono">Gazebo Harmonic SITL Launch</div>
+            <pre class="bg-slate-900 text-emerald-300 p-3 rounded-lg font-mono text-[11px] overflow-x-auto border border-slate-800">export PX4_HOME_LAT=53.5461
+export PX4_HOME_LON=-113.4938
+export PX4_HOME_ALT=670
+make px4_sitl gz_standard_vtol</pre>
+            <p class="text-slate-300">In QGroundControl, navigate to <strong>Vehicle Setup → Parameters → Tools → Load from file</strong> and load `quadplane_vtol.params` (`SYS_AUTOSTART 13000` + MicoAir MTF-02P UART parameters).</p>
+          </div>
+          <div class="doc-subcard bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-2">
+            <div class="font-bold text-sky-300 font-mono">Supported QGroundControl Controllers</div>
+            <ul class="space-y-1.5 text-slate-300 list-disc pl-4">
+              <li><strong>Xbox Series X|S Game Controller:</strong> Enable <em>Joystick</em>, select <strong>Mode 2</strong>, check <strong>"Throttle sticks to center"</strong>; map <strong>Y</strong> = VTOL Transition, <strong>A</strong> = Arm, <strong>B</strong> = RTL.</li>
+              <li><strong>RadioLink T16D:</strong> Connect via USB-C in <em>USB Joystick (HID)</em> mode; map `SA` (CH5) to Flight Mode and `SB` (CH6) to VTOL Transition.</li>
+              <li><strong>FlySky FS-i6X &amp; Spektrum DX6i:</strong> Supported via USB trainer dongle or Spektrum WS2000 wireless USB stick.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 8: Interactive Pre-Flight Verification Checklist -->
+      <section id="sec-8" class="doc-card bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold">SECTION 08</span>
+            <h3 class="text-lg font-bold text-white">Interactive Pre-Flight Verification Checklist</h3>
+          </div>
+          <span id="checklistProgress" class="text-xs font-mono px-3 py-1 rounded-lg bg-slate-950 border border-slate-800 text-sky-300">0 / 6 Verified</span>
+        </div>
+
+        <div class="space-y-2.5 text-xs" id="checklistContainer">
+          <label class="doc-subcard flex items-start gap-3 p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 cursor-pointer hover:border-sky-500/50 transition">
+            <input type="checkbox" onchange="updateChecklist()" class="mt-0.5 rounded text-sky-500 w-4 h-4" />
+            <span><strong>1. Physical CG Balance Check:</strong> Suspend the fully loaded aircraft at the calculated $\text{CG}$ station ($26\%–29\%\text{ MAC}$ aft of the wing leading edge) and verify the fuselage hangs level within $\pm 2^\circ$.</span>
+          </label>
+          <label class="doc-subcard flex items-start gap-3 p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 cursor-pointer hover:border-sky-500/50 transition">
+            <input type="checkbox" onchange="updateChecklist()" class="mt-0.5 rounded text-sky-500 w-4 h-4" />
+            <span><strong>2. Payload Release CG Shift Check:</strong> Detach the external cargo pod and verify $\text{CG}$ shifts by $< 4.5\%\text{ MAC}$ while Static Margin remains $\ge 8\%\text{ MAC}$.</span>
+          </label>
+          <label class="doc-subcard flex items-start gap-3 p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 cursor-pointer hover:border-sky-500/50 transition">
+            <input type="checkbox" onchange="updateChecklist()" class="mt-0.5 rounded text-sky-500 w-4 h-4" />
+            <span><strong>3. PX4 QuadPlane Motor Order &amp; Spin Direction:</strong> Confirm `M1 (Front-Right)` = CCW, `M2 (Rear-Left)` = CCW, `M3 (Front-Left)` = CW, `M4 (Rear-Right)` = CW.</span>
+          </label>
+          <label class="doc-subcard flex items-start gap-3 p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 cursor-pointer hover:border-sky-500/50 transition">
+            <input type="checkbox" onchange="updateChecklist()" class="mt-0.5 rounded text-sky-500 w-4 h-4" />
+            <span><strong>4. Propeller-to-Wing &amp; Pod Clearance:</strong> Verify $> 25\text{ mm}$ physical clearance between all VTOL rotor tips, the wing leading/trailing edges, and the external payload pod.</span>
+          </label>
+          <label class="doc-subcard flex items-start gap-3 p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 cursor-pointer hover:border-sky-500/50 transition">
+            <input type="checkbox" onchange="updateChecklist()" class="mt-0.5 rounded text-sky-500 w-4 h-4" />
+            <span><strong>5. MicoAir MTF-02 / MTF-02P Optical Flow Stream:</strong> Open QGroundControl <em>MAVLink Inspector</em> over USB and confirm `DISTANCE_SENSOR` and `OPTICAL_FLOW_RAD` stream at $\ge 10\text{ Hz}$.</span>
+          </label>
+          <label class="doc-subcard flex items-start gap-3 p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 cursor-pointer hover:border-sky-500/50 transition">
+            <input type="checkbox" onchange="updateChecklist()" class="mt-0.5 rounded text-sky-500 w-4 h-4" />
+            <span><strong>6. Pitot Dynamic Pressure Pre-Transition Check:</strong> Verify positive airspeed response on the nose Pitot tube before arming autonomous forward transition (`VT_ARSP_TRANS`).</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- SECTION 9: Global Drone Component Suppliers & Interactive Vendor Directory -->
+      <section id="sec-9" class="doc-card bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+          <div class="flex items-center gap-2.5">
+            <span class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-mono text-xs font-bold">SECTION 09</span>
+            <div>
+              <h3 class="text-lg font-bold text-white">Approved Drone Component Suppliers &amp; Custom Vendor Directory (20 Categories)</h3>
+              <p class="text-xs text-slate-400">Complete Ecosystem: FCs, SBCs, ESCs, Motors, Props, Batteries, Sensors, GNSS, Telemetry, FPV, RC, Servos, LiDAR, Cameras/Gimbals, Kits, Power, Parachutes, Hybrid Generators, GCS Antennas &amp; Payload Release/Tubes</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 no-print">
+            <span id="supplierCountBadge" class="text-xs font-mono px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-amber-300">116 Suppliers Listed</span>
+            <button type="button" onclick="exportSuppliersCsv()" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold transition">
+              Export Suppliers (.CSV)
+            </button>
+          </div>
+        </div>
+
+        <!-- Category Filter & Search Controls -->
+        <div class="flex flex-wrap items-center justify-between gap-3 no-print">
+          <div class="flex flex-wrap gap-1.5" id="supplierCategoryPills">
+            <button type="button" onclick="setSupplierFilter('ALL')" data-cat="ALL" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-sky-600 text-white transition">All Categories (20)</button>
+            <button type="button" onclick="setSupplierFilter('Flight Controllers')" data-cat="Flight Controllers" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 hover:border-sky-500/50 transition">Flight Controllers</button>
+            <button type="button" onclick="setSupplierFilter('Companion SBCs')" data-cat="Companion SBCs" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 hover:border-sky-500/50 transition">Single Board Computers (SBC)</button>
+            <button type="button" onclick="setSupplierFilter('ESCs')" data-cat="ESCs" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 hover:border-sky-500/50 transition">ESCs</button>
+            <button type="button" onclick="setSupplierFilter('Motors')" data-cat="Motors" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 hover:border-sky-500/50 transition">Motors</button>
+            <button type="button" onclick="setSupplierFilter('Propellers')" data-cat="Propellers" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 hover:border-sky-500/50 transition">Propellers</button>
+            <button type="button" onclick="setSupplierFilter('Batteries')" data-cat="Batteries" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 hover:border-sky-500/50 transition">Batteries</button>
+            <button type="button" onclick="setSupplierFilter('Sensors')" data-cat="Sensors" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 hover:border-sky-500/50 transition">Sensors (OptFlow / Airspeed)</button>
+            <button type="button" onclick="setSupplierFilter('GPS / GNSS')" data-cat="GPS / GNSS" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 hover:border-sky-500/50 transition">GPS / GNSS</button>
+            <button type="button" onclick="setSupplierFilter('Telemetry Radios')" data-cat="Telemetry Radios" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 hover:border-sky-500/50 transition">Telemetry Radios</button>
+            <button type="button" onclick="setSupplierFilter('FPV Systems')" data-cat="FPV Systems" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 hover:border-sky-500/50 transition">FPV Systems</button>
+            <button type="button" onclick="setSupplierFilter('RC Transmitters & Receivers')" data-cat="RC Transmitters & Receivers" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 hover:border-sky-500/50 transition">RC Transmitters &amp; Receivers</button>
+            <button type="button" onclick="setSupplierFilter('Servos & Actuators')" data-cat="Servos & Actuators" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 hover:border-sky-500/50 transition">Servos &amp; Actuators</button>
+            <button type="button" onclick="setSupplierFilter('LiDAR Scanners')" data-cat="LiDAR Scanners" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 hover:border-sky-500/50 transition">LiDAR</button>
+            <button type="button" onclick="setSupplierFilter('Cameras & Gimbals')" data-cat="Cameras & Gimbals" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 hover:border-sky-500/50 transition">Cameras &amp; Gimbals</button>
+            <button type="button" onclick="setSupplierFilter('Drone Kits & Airframes')" data-cat="Drone Kits & Airframes" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 hover:border-sky-500/50 transition">Drone Kits &amp; Airframes</button>
+            <button type="button" onclick="setSupplierFilter('Power, Wiring & Connectors')" data-cat="Power, Wiring & Connectors" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 hover:border-sky-500/50 transition">Power, Wiring &amp; Connectors</button>
+            <button type="button" onclick="setSupplierFilter('Parachute & Safety Recovery')" data-cat="Parachute & Safety Recovery" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-rose-300 hover:border-rose-500/50 transition">+ Parachute &amp; Safety</button>
+            <button type="button" onclick="setSupplierFilter('Airborne Generators & Hybrid Power')" data-cat="Airborne Generators & Hybrid Power" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-amber-300 hover:border-amber-500/50 transition">+ Hybrid Generators &amp; Fuel Cells</button>
+            <button type="button" onclick="setSupplierFilter('GCS Hardware & Antennas')" data-cat="GCS Hardware & Antennas" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-cyan-300 hover:border-cyan-500/50 transition">+ GCS &amp; Antennas</button>
+            <button type="button" onclick="setSupplierFilter('Carbon Tubes, Filaments & Release Winches')" data-cat="Carbon Tubes, Filaments & Release Winches" class="sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-emerald-300 hover:border-emerald-500/50 transition">+ Carbon Spars, 3D Filaments &amp; Release</button>
+          </div>
+          <div class="w-full sm:w-72">
+            <input type="text" id="supplierSearchInput" oninput="renderSuppliersTable()" placeholder="Search Holybro, MicoAir, parachute, carbon..." class="w-full rounded-xl bg-slate-950 border border-slate-800 px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-500" />
+          </div>
+        </div>
+
+        <!-- Suppliers Directory Table -->
+        <div class="overflow-x-auto rounded-xl border border-slate-800">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-950 text-sky-300 font-mono border-b border-slate-800">
+                <th class="py-3 px-3.5">Category</th>
+                <th class="py-3 px-3.5">Supplier / Brand</th>
+                <th class="py-3 px-3.5">Flagship QuadPlane Components &amp; Models</th>
+                <th class="py-3 px-3.5">Official Website</th>
+                <th class="py-3 px-3.5 text-right no-print">Action</th>
+              </tr>
+            </thead>
+            <tbody id="suppliersTableBody" class="divide-y divide-slate-800/80 text-slate-300"></tbody>
+          </table>
+        </div>
+
+        <!-- Add Custom Supplier Form -->
+        <div class="doc-subcard bg-slate-950/90 border border-slate-800 rounded-2xl p-4 space-y-3 no-print">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h4 class="text-xs font-bold text-amber-300 font-mono uppercase tracking-wider">+ Add Custom Component Supplier Not Listed</h4>
+              <p class="text-[11px] text-slate-400">Custom suppliers are saved automatically in your browser (`localStorage`) and included in `.CSV` exports.</p>
+            </div>
+            <button type="button" onclick="resetCustomSuppliers()" class="text-[11px] font-mono text-slate-400 hover:text-rose-400 underline">Reset Custom Entries</button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 text-xs">
+            <div class="sm:col-span-3">
+              <label class="block text-[11px] font-semibold text-slate-400 mb-1">Component Category</label>
+              <select id="newSupCategory" class="w-full rounded-xl bg-slate-900 border border-slate-700 px-3 py-2 text-xs text-white focus:border-sky-500">
+                <option value="Flight Controllers">Flight Controllers</option>
+                <option value="Companion SBCs">Single Board Computers (SBC)</option>
+                <option value="ESCs">ESCs</option>
+                <option value="Motors">Motors</option>
+                <option value="Propellers">Propellers</option>
+                <option value="Batteries">Batteries</option>
+                <option value="Sensors">Sensors (Optical Flow / Airspeed)</option>
+                <option value="GPS / GNSS">GPS / GNSS</option>
+                <option value="Telemetry Radios">Telemetry Radios</option>
+                <option value="FPV Systems">FPV Systems</option>
+                <option value="RC Transmitters & Receivers">RC Transmitters &amp; Receivers</option>
+                <option value="Servos & Actuators">Servos &amp; Actuators</option>
+                <option value="LiDAR Scanners">LiDAR Scanners</option>
+                <option value="Cameras & Gimbals">Cameras (B/W, Color, Night, Thermal) &amp; Gimbals</option>
+                <option value="Drone Kits & Airframes">Drone Kits &amp; Airframes</option>
+                <option value="Power, Wiring & Connectors">Power, Wiring &amp; Connectors</option>
+                <option value="Parachute & Safety Recovery">Parachute &amp; Safety Recovery</option>
+                <option value="Airborne Generators & Hybrid Power">Airborne Generators &amp; Hybrid Power</option>
+                <option value="GCS Hardware & Antennas">GCS Hardware &amp; Antennas</option>
+                <option value="Carbon Tubes, Filaments & Release Winches">Carbon Spars, 3D Filaments &amp; Release Winches</option>
+              </select>
+            </div>
+            <div class="sm:col-span-3">
+              <label class="block text-[11px] font-semibold text-slate-400 mb-1">Supplier / Vendor Name</label>
+              <input type="text" id="newSupName" placeholder="e.g. KDE Direct / MaxAmps" class="w-full rounded-xl bg-slate-900 border border-slate-700 px-3 py-2 text-xs text-white placeholder-slate-500 focus:border-sky-500" />
+            </div>
+            <div class="sm:col-span-3">
+              <label class="block text-[11px] font-semibold text-slate-400 mb-1">Supported Models / Specialty</label>
+              <input type="text" id="newSupProducts" placeholder="e.g. Heavy-lift brushless motors &amp; blades" class="w-full rounded-xl bg-slate-900 border border-slate-700 px-3 py-2 text-xs text-white placeholder-slate-500 focus:border-sky-500" />
+            </div>
+            <div class="sm:col-span-3">
+              <label class="block text-[11px] font-semibold text-slate-400 mb-1">Website URL</label>
+              <div class="flex gap-1.5">
+                <input type="url" id="newSupUrl" placeholder="https://example.com" class="w-full rounded-xl bg-slate-900 border border-slate-700 px-3 py-2 text-xs font-mono text-white placeholder-slate-500 focus:border-sky-500" />
+                <button type="button" onclick="addCustomSupplier()" class="px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold shrink-0 transition">Add</button>
+              </div>
+            </div>
+          </div>
+          <div id="supplierFeedbackMsg" class="hidden text-[11px] font-mono text-emerald-400"></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    const DEFAULT_SUPPLIERS = [
+      // Featured Multi-Category Suppliers: MicoAir Tech & Holybro
+      {
+        category: 'Sensors',
+        name: 'MicoAir Tech',
+        products: 'MTF-02 / MTF-02P / MTF-01 Optical Flow & ToF Rangefinders, MicoVIO, MicoAir743v3 FC, 55A/70A AM32 ESCs, MG-F10 GNSS & RTK',
+        url: 'https://micoair.com/en',
+        featured: true
+      },
+      {
+        category: 'Flight Controllers',
+        name: 'MicoAir Tech (Autopilots)',
+        products: 'MicoAir743v3, MicoAir743-AIO-45A, NxtPX4v2 (Native PX4 & ArduPilot support)',
+        url: 'https://micoair.com/en',
+        featured: true
+      },
+      {
+        category: 'Flight Controllers',
+        name: 'Holybro (Autopilots & Full Ecosystem)',
+        products: 'Pixhawk 6X / 6X Pro, Pixhawk 6C / 6C Mini, Durandal H7, Kakute H7 & Pix32 v6 Autopilots',
+        url: 'https://holybro.com/',
+        featured: true
+      },
+      {
+        category: 'Flight Controllers',
+        name: 'CUAV Tech',
+        products: 'CUAV X7+ Pro, Pixhawk V6X, Nora+ H7 Dual/Triple-Redundant IMU Autopilots',
+        url: 'https://www.cuav.net/en/'
+      },
+      {
+        category: 'Flight Controllers',
+        name: 'CubePilot (Hex)',
+        products: 'Cube Orange+, Cube Blue H7 (NDAA), Kore Carrier Boards for VTOL QuadPlanes',
+        url: 'https://www.cubepilot.com/'
+      },
+      {
+        category: 'Flight Controllers',
+        name: 'Matek Systems',
+        products: 'H743-WING V3, F405-VTOL, DroneCAN AP_Periph Airspeed & Power Nodes',
+        url: 'https://www.mateksys.com/'
+      },
+      // Single Board Computers (SBC) & Companion Computers
+      {
+        category: 'Companion SBCs',
+        name: 'Raspberry Pi Ltd',
+        products: 'Raspberry Pi 5 (8GB/16GB), Compute Module 5 (CM5) & CM4, Raspberry Pi Zero 2 W for MAVROS / ROS 2 / MAVLink routing',
+        url: 'https://www.raspberrypi.com/',
+        featured: true
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'NVIDIA (Jetson Embedded)',
+        products: 'Jetson Orin Nano Super (67 TOPS), Orin NX (100 TOPS), Jetson AGX Orin for onboard AI vision, VIO & obstacle avoidance',
+        url: 'https://developer.nvidia.com/embedded-computing',
+        featured: true
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'Holybro (Jetson & RPi CM4 Baseboards)',
+        products: 'Pixhawk Jetson Baseboard (Orin NX/Nano + Pixhawk 6X) & Pixhawk Raspberry Pi CM4 Baseboard integrated companion carriers',
+        url: 'https://holybro.com/collections/autopilot-flight-controllers',
+        featured: true
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'Radxa (RPi Equivalent SBCs)',
+        products: 'ROCK 5B / 5B+ (RK3588 8-Core 6 TOPS NPU), Radxa CM5, Radxa Zero 3W ultra-light UAV companion boards',
+        url: 'https://radxa.com/'
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'Orange Pi (Shenzhen Xunlong)',
+        products: 'Orange Pi 5 Pro / 5 Max / 5 Plus (Rockchip RK3588S/RK3588), Orange Pi Zero 2W RPi-form-factor alternatives',
+        url: 'http://www.orangepi.org/'
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'Khadas',
+        products: 'VIM4 (Amlogic A311D2 + NPU) & Edge2 (RK3588S) ultra-thin credit-card SBCs with native MIPI-CSI camera & PCIe',
+        url: 'https://www.khadas.com/'
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'Hardkernel (ODROID)',
+        products: 'ODROID-M1S, ODROID-M2 (RK3588S2), ODROID-C4 & XU4 ruggedized UAV companion SBCs',
+        url: 'https://www.hardkernel.com/'
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'Seeed Studio (Carrier Boards & SBCs)',
+        products: 'reComputer J30/J40 Mini Jetson Orin Carrier Boards, Raspberry Pi CM4/CM5 UAV carrier boards & XIAO micro-modules',
+        url: 'https://www.seeedstudio.com/'
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'ModalAI (NDAA UAV Companion Computers)',
+        products: 'VOXL 2 & VOXL 2 Mini (Qualcomm QRB5165 15 TOPS + integrated PX4 DSP), VOXL CAM VIO/SLAM & 5G BVLOS modules',
+        url: 'https://www.modalai.com/',
+        featured: true
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'Auterion (Skynode UAV Mission Computers)',
+        products: 'Skynode X & Skynode S all-in-one PX4 FMUv6X + companion mission computer, LTE/5G link & AuterionOS',
+        url: 'https://auterion.com/',
+        featured: true
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'Qualcomm (Robotics RB3 / RB5 Platforms)',
+        products: 'Dragonwing RB3 Gen 2 & Robotics RB5 (QRB5165) low-SWaP heterogeneous compute & AI vision platforms for drones',
+        url: 'https://www.qualcomm.com/products/internet-of-things/industrial/industrial-automation/robotics'
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'Connect Tech (UAV Jetson Carriers)',
+        products: 'Hadron, Boson for FRAMOS & Photon ultra-small ruggedized NVIDIA Jetson Orin NX / Nano carrier boards for UAV payloads',
+        url: 'https://connecttech.com/'
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'BeagleBoard.org',
+        products: 'BeagleY-AI (RPi5 form factor, TI AM67A 4 TOPS), BeagleV-Fire (RISC-V + FPGA) & BeagleBone Blue robotics SBCs',
+        url: 'https://www.beagleboard.org/'
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'Banana Pi (BPI / Sinovoip)',
+        products: 'BPI-M7 (RK3588 6 TOPS NPU), BPI-M5, BPI-M4 Berry & BPI-CM4 RPi-equivalent SBCs and compute modules',
+        url: 'https://www.banana-pi.org/'
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'FriendlyElec (NanoPi)',
+        products: 'NanoPi R6C / R6S, NanoPC-T6 (RK3588 PCIe/M.2) & ultra-compact NanoPi NEO3/ZeroPi telemetry companion boards',
+        url: 'https://www.friendlyelec.com/'
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'ASUS IoT (Tinker Board)',
+        products: 'Tinker Board 3N, Tinker Board 2S & PE1000N (Jetson Orin) industrial-temperature RPi-footprint SBCs',
+        url: 'https://tinker-board.asus.com/'
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'PINE64',
+        products: 'Quartz64 Model A/B, SOQuartz (CM4-compatible module), RockPro64 & Star64 (RISC-V) open-hardware SBCs',
+        url: 'https://www.pine64.org/'
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'Libre Computer (LoveRPi)',
+        products: 'Le Potato (AML-S905X-CC), Alta (AML-A311D 5 TOPS NPU) & Solitude drop-in Raspberry Pi 3B+/4B replacements',
+        url: 'https://libre.computer/'
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'LattePanda (DFRobot x86 SBCs)',
+        products: 'LattePanda Sigma (Intel Core i5-1340P), LattePanda Mu (N100 Compute Module) & 3 Delta x86 ROS 2 / Windows/Ubuntu SBCs',
+        url: 'https://www.lattepanda.com/'
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'AAEON (UP Bridge the Gap)',
+        products: 'UP Board, UP Squared Pro 7000 (Intel Alder Lake-N) & BOXER-8640AI compact NVIDIA Jetson Orin UAV computers',
+        url: 'https://www.up-board.org/'
+      },
+      {
+        category: 'Companion SBCs',
+        name: 'Advantech (Industrial UAV Edge SBCs)',
+        products: 'MIC-711-OX / MIC-711-ON (Jetson Orin NX/Nano) & RSB-3720 2.5" Pico-ITX industrial drone companion boards',
+        url: 'https://www.advantech.com/'
+      },
+      // ESCs
+      {
+        category: 'ESCs',
+        name: 'Hobbywing',
+        products: 'XRotor Pro 40A–80A VTOL ESCs, Platinum Pro 70A/80A BEC Fixed-Wing Pusher ESCs',
+        url: 'https://www.hobbywing.com/'
+      },
+      {
+        category: 'ESCs',
+        name: 'T-Motor (ESCs)',
+        products: 'FLAME 60A/80A HV, ALPHA 40A/60A FOC Waterproof VTOL ESCs',
+        url: 'https://store.tmotor.com/'
+      },
+      {
+        category: 'ESCs',
+        name: 'MicoAir Tech (ESCs)',
+        products: 'MicoAir 55A & 70A 4-in-1 AM32 / Bluejay Telemetry ESCs',
+        url: 'https://micoair.com/en',
+        featured: true
+      },
+      {
+        category: 'ESCs',
+        name: 'Holybro (Tekko32 & DroneCAN ESCs)',
+        products: 'Tekko32 F4 45A/65A BLHeli_32 ESCs, Tekko32 Metal 65A & Kotleta20 DroneCAN ESCs',
+        url: 'https://holybro.com/collections/escs',
+        featured: true
+      },
+      {
+        category: 'ESCs',
+        name: 'APD (Advanced Power Drives)',
+        products: '80F3x, 120F3x, HV Pro High-Voltage DroneCAN / Telemetry ESCs',
+        url: 'https://powerdrives.net/'
+      },
+      // Brushless Motors
+      {
+        category: 'Motors',
+        name: 'T-Motor',
+        products: 'MN4014 KV400, MN5008 KV340 Antigravity VTOL Lift Motors; AT3520 & AT4120 Fixed-Wing Pusher Motors',
+        url: 'https://store.tmotor.com/'
+      },
+      {
+        category: 'Motors',
+        name: 'SunnySky USA / RC',
+        products: 'X4112S KV320/KV400, V4010 Heavy-Lift VTOL & X3520 Fixed-Wing Brushless Motors',
+        url: 'https://sunnyskyusa.com/'
+      },
+      {
+        category: 'Motors',
+        name: 'Dualsky',
+        products: 'ECO 3520C, ECO 4120C, XM5050EA High-Efficiency Fixed-Wing Cruise Motors',
+        url: 'http://www.dualsky.com/'
+      },
+      {
+        category: 'Motors',
+        name: 'KDE Direct',
+        products: 'KDE4012XF-400, KDE4215XF-465 Industrial Multi-Rotor & VTOL Brushless Motors',
+        url: 'https://www.kdedirect.com/'
+      },
+      // Propellers
+      {
+        category: 'Propellers',
+        name: 'APC Propellers (Landing Products)',
+        products: '14×5.5MR, 15×5.5MR Multi-Rotor Lift Props; 13×8E, 14×8.5E Thin Electric Pusher Props',
+        url: 'https://www.apcprop.com/'
+      },
+      {
+        category: 'Propellers',
+        name: 'Master Airscrew',
+        products: '13×8, 14×9 Electric Fixed-Wing & Multi-Rotor Composite Propellers',
+        url: 'https://www.masterairscrew.com/'
+      },
+      {
+        category: 'Propellers',
+        name: 'HQProp',
+        products: '14×5, 15×5 Carbon-Reinforced Composite CW/CCW VTOL Propellers',
+        url: 'https://www.hqprop.com/'
+      },
+      {
+        category: 'Propellers',
+        name: 'Mejzlik Propellers',
+        products: 'Aerospace-Grade Prepreg Carbon Fiber VTOL & Fixed-Wing Propellers (15"–22")',
+        url: 'https://www.mejzlik.eu/'
+      },
+      {
+        category: 'Propellers',
+        name: 'XOAR International',
+        products: 'PJM-E Precision Pair Carbon & Laminated Beechwood Electric Propellers',
+        url: 'https://www.xoarintl.com/'
+      },
+      // Popular Battery Suppliers
+      {
+        category: 'Batteries',
+        name: 'Molicel (E-One Moli Energy)',
+        products: 'INR-21700-P45B (4500mAh 45A) & P50B High-Power Li-Ion Cells for 6S2P/8S2P VTOL Packs',
+        url: 'https://www.molicel.com/'
+      },
+      {
+        category: 'Batteries',
+        name: 'Tattu / Gens Ace (Grepow)',
+        products: 'Tattu Plus 6S/12S Smart UAV LiPo & Semi-Solid High-Energy Density Packs (8000–16000mAh)',
+        url: 'https://www.genstattu.com/'
+      },
+      {
+        category: 'Batteries',
+        name: 'Titan Power / Ampxell',
+        products: 'Pre-welded 6S2P & 6S3P Molicel P45B Long-Endurance Lithium-Ion UAV Battery Packs',
+        url: 'https://www.gettitanpower.com/'
+      },
+      // Sensors for Drones
+      {
+        category: 'Sensors',
+        name: 'Holybro (Airspeed, Optical Flow & Rangefinders)',
+        products: 'Digital Differential Airspeed Sensor (MS4525DO Pitot), PMW3901 Optical Flow & ST VL53L1X ToF Rangefinder Modules',
+        url: 'https://holybro.com/collections/sensors',
+        featured: true
+      },
+      {
+        category: 'Sensors',
+        name: 'Sensirion / Matek (Airspeed)',
+        products: 'SDP31 / SDP33 Digital Differential Pressure & MS4525DO Pitot Tube Airspeed Sensors',
+        url: 'https://sensirion.com/'
+      },
+      {
+        category: 'Sensors',
+        name: 'LightWare LiDAR',
+        products: 'SF20/C, LW20/C Micro Laser Altimeters for Long-Range VTOL Terrain Following',
+        url: 'https://lightwarelidar.com/'
+      },
+      // GPS / GNSS for Drones
+      {
+        category: 'GPS / GNSS',
+        name: 'MicoAir Tech (GNSS & RTK)',
+        products: 'MG-F10-A Dual-Frequency GNSS Module & MA-RTK-AIR-982 Dual-Antenna RTK Heading System',
+        url: 'https://micoair.com/en',
+        featured: true
+      },
+      {
+        category: 'GPS / GNSS',
+        name: 'Holybro / u-blox (GNSS & H-RTK)',
+        products: 'DroneCAN H-RTK F9P Helical / Rover / Unicore UM982 Dual-Antenna, M9N & M10 High-Precision GNSS Compass Modules',
+        url: 'https://holybro.com/collections/gps-rtk-systems',
+        featured: true
+      },
+      {
+        category: 'GPS / GNSS',
+        name: 'CUAV GNSS',
+        products: 'C-RTK 9Ps, Neo 3 Pro (u-blox M9N + RM3100 Industrial Anti-Interference Compass)',
+        url: 'https://www.cuav.net/en/'
+      },
+      // Telemetry Radios & Data Links
+      {
+        category: 'Telemetry Radios',
+        name: 'MicoAir Tech (Telemetry & Wi-Fi 6 Links)',
+        products: 'MicoAir-WiFi-Link Dual-Band Wi-Fi 6, LR900 (900MHz), LR24 (2.4GHz), TRS 2-in-1 RC & Telemetry, MSTAR24 Swarm Mesh',
+        url: 'https://micoair.com/en',
+        featured: true
+      },
+      {
+        category: 'Telemetry Radios',
+        name: 'Holybro (SiK, P900 & XBP9X Telemetry)',
+        products: 'SiK Telemetry Radio V3 (100mW/500mW 915/433MHz), Microhard P900 & Digi XBee XBP9X Enclosed UAV Radios',
+        url: 'https://holybro.com/collections/telemetry-radios',
+        featured: true
+      },
+      {
+        category: 'Telemetry Radios',
+        name: 'RFDesign (RFD900x / RFD868x)',
+        products: 'RFD900x-US & RFD868x-EU 1W (+30dBm) Long-Range 40km+ AES-Encrypted MAVLink Telemetry Modems',
+        url: 'https://rfdesign.com.au/',
+        featured: true
+      },
+      {
+        category: 'Telemetry Radios',
+        name: 'Microhard Systems',
+        products: 'pMDDL2450, n920X & p900 Industrial MIMO IP / Serial BVLOS Drone Command & Telemetry Radios',
+        url: 'https://www.microhardcorp.com/'
+      },
+      {
+        category: 'Telemetry Radios',
+        name: 'Silvus Technologies',
+        products: 'StreamCaster SC4200E & SC4400E Tactical MN-MIMO Mesh Video & C2 Data Links',
+        url: 'https://silvustechnologies.com/'
+      },
+      // FPV Systems (Digital HD & Analog Long-Range)
+      {
+        category: 'FPV Systems',
+        name: 'DJI (Digital FPV Air Units)',
+        products: 'DJI O4 Air Unit Pro / O3 Air Unit (1080p/120fps, 4K onboard recording) & DJI Goggles 3 / Integra',
+        url: 'https://www.dji.com/'
+      },
+      {
+        category: 'FPV Systems',
+        name: 'CaddxFPV / Walksnail Avatar HD',
+        products: 'Walksnail Avatar HD Pro Kit (Sony Starvis II Night Sensor), Moonlight 4K, Goggles X & Analog Ratel 2',
+        url: 'https://caddxfpv.com/'
+      },
+      {
+        category: 'FPV Systems',
+        name: 'HDZero (Divimath)',
+        products: 'HDZero Freestyle V2 VTX, Whoop Lite, Event VRX & Ultra-Low Fixed-Latency Digital HD FPV Goggles',
+        url: 'https://www.hd-zero.com/'
+      },
+      {
+        category: 'FPV Systems',
+        name: 'RushFPV',
+        products: 'Rush Tank Max Solo (2.5W 5.8GHz), RushFPV 1.3GHz/3.3GHz Long-Range VTXs & TrueRC / Cherry Antennas',
+        url: 'https://www.rushfpv.net/'
+      },
+      {
+        category: 'FPV Systems',
+        name: 'Foxeer',
+        products: 'Foxeer Reaper Extreme 2.5W VTX, Wildfire Receiver, Lollipop 4+ Antennas & Low-Latency FPV Cameras',
+        url: 'https://www.foxeer.com/'
+      },
+      // RC Transmitters, Receivers & Integrated Remote Control (GCS)
+      {
+        category: 'RC Transmitters & Receivers',
+        name: 'RadioMaster RC (EdgeTX & ExpressLRS)',
+        products: 'TX16S Mark II Max, Boxer Crush, GX12 Dual-Band Gemini Xrossband Transmitters & RP3/RP4TD Diversity ELRS Receivers',
+        url: 'https://www.radiomasterrc.com/',
+        featured: true
+      },
+      {
+        category: 'RC Transmitters & Receivers',
+        name: 'RadioLink Electronic',
+        products: 'RadioLink T16D & AT9S Pro Transmitters; R16F / R12DS SBUS/CRSF/PWM Long-Range FHSS Receivers',
+        url: 'https://www.radiolink.com/'
+      },
+      {
+        category: 'RC Transmitters & Receivers',
+        name: 'Team BlackSheep (TBS Crossfire / Tracer)',
+        products: 'TBS Crossfire TX/Nano Diversity RX (868/915MHz 40km+ CRSF Link), TBS Tango 2 & Mambo Transmitters',
+        url: 'https://www.team-blacksheep.com/',
+        featured: true
+      },
+      {
+        category: 'RC Transmitters & Receivers',
+        name: 'FrSky Electronic',
+        products: 'TANDEM X20 PRO AW (Dual-Band 900MHz + 2.4GHz), Twin X14 & TD R18 / R10 Redundant SBUS/FBUS Receivers',
+        url: 'https://www.frsky-rc.com/'
+      },
+      {
+        category: 'RC Transmitters & Receivers',
+        name: 'SIYI Technology (Handheld GCS & Links)',
+        products: 'SIYI UniRC 7 & MK32 / MK15 Enterprise Handheld Ground Control Stations (Integrated FHD Screen + Video + MAVLink + RC)',
+        url: 'https://siyi.biz/en/'
+      },
+      {
+        category: 'RC Transmitters & Receivers',
+        name: 'CubePilot Herelink',
+        products: 'Herelink v1.1 All-in-One Digital HD Video, MAVLink Telemetry & Touch-Screen Handheld Remote Controller for PX4/QGC',
+        url: 'https://www.cubepilot.com/#/herelink/overview'
+      },
+      {
+        category: 'RC Transmitters & Receivers',
+        name: 'FlySky RC',
+        products: 'FS-ST16, Paladin PL18 EV & FS-i6X Transmitters; FS-iA10B / FTr10 PPM/i-BUS/SBUS Receivers',
+        url: 'https://www.flysky-cn.com/'
+      },
+      {
+        category: 'RC Transmitters & Receivers',
+        name: 'Spektrum RC (Horizon Hobby)',
+        products: 'iX20, NX10+, DX6i DSMX Transmitters, AR8020T / AR10360T SRXL2 Telemetry Receivers & WS2000 Sim Dongle',
+        url: 'https://www.spektrumrc.com/'
+      },
+      // Servos & Actuators
+      {
+        category: 'Servos & Actuators',
+        name: 'KST Digital Servos',
+        products: 'KST X10, X10 Mini, A12-T, X15-1808 Full-CNC Aluminum Case Steel-Gear High-Voltage Wing & Tail Servos',
+        url: 'https://www.kstsz.com/',
+        featured: true
+      },
+      {
+        category: 'Servos & Actuators',
+        name: 'Hitec RCD / Hitec Commercial Solutions',
+        products: 'D85MG, HS-5087MH, MD950TW & Industrial CAN/UAVCAN Brushless Actuators with Position Feedback',
+        url: 'https://hitecrcd.com/'
+      },
+      {
+        category: 'Servos & Actuators',
+        name: 'Savöx Servos',
+        products: 'SV-1250MG, SV-1261MG, SW-1250MG Waterproof Coreless/Brushless High-Voltage Metal-Gear UAV Servos',
+        url: 'https://www.savoxusa.com/'
+      },
+      {
+        category: 'Servos & Actuators',
+        name: 'MKS Servos',
+        products: 'MKS HV6130, HBL6625, HV747R Aerospace-Grade Titanium/Steel-Gear Thin-Wing & Tail Actuators',
+        url: 'https://www.mks-servo.com.tw/'
+      },
+      {
+        category: 'Servos & Actuators',
+        name: 'Volz Servos (Aerospace Actuators)',
+        products: 'DA 15-N, DA 22 & DA 26 Redundant RS-485 / DroneCAN Submersible Certified UAV Actuators',
+        url: 'https://www.volz-servos.com/'
+      },
+      {
+        category: 'Servos & Actuators',
+        name: 'EMAX Model',
+        products: 'ES08MD II, ES3054 & ES3352 Budget Metal-Gear Digital Mini Servos for Lightweight Foam/LW-PLA Prototypes',
+        url: 'https://emaxmodel.com/'
+      },
+      // LiDAR Scanners & Laser Altimeters
+      {
+        category: 'LiDAR Scanners',
+        name: 'Livox (3D Mapping LiDAR)',
+        products: 'Livox Mid-360 (360° 3D SLAM/Obstacle Avoidance, 265g) & Avia Long-Range Aerial Survey LiDAR',
+        url: 'https://www.livoxtech.com/',
+        featured: true
+      },
+      {
+        category: 'LiDAR Scanners',
+        name: 'Ouster / Velodyne LiDAR',
+        products: 'Ouster OS0 / OS1-64 / OS1-128 & Velodyne Puck LITE Ultra-Light 3D Aerial Mapping LiDARs',
+        url: 'https://ouster.com/'
+      },
+      {
+        category: 'LiDAR Scanners',
+        name: 'Hesai Technology',
+        products: 'Hesai XT32 / XT16 & PandarXTM Lightweight High-Precision UAV Survey & Corridor Mapping LiDARs',
+        url: 'https://www.hesaitech.com/'
+      },
+      {
+        category: 'LiDAR Scanners',
+        name: 'Benewake LiDAR',
+        products: 'TFmini-S, TF-Luna, TF02-Pro (40m IP65) & TF03 (180m) Single-Point UART/I2C/CAN Terrain-Following Altimeters',
+        url: 'https://en.benewake.com/'
+      },
+      {
+        category: 'LiDAR Scanners',
+        name: 'YellowScan / GreenValley International',
+        products: 'Turnkey Surveyor Ultra, Mapper+ & LiAir X3/X4 Integrated GNSS-INS UAV LiDAR Payloads',
+        url: 'https://www.yellowscan.com/'
+      },
+      // Cameras (B/W, Color, Night Starlight, Thermal IR) & Gimbals
+      {
+        category: 'Cameras & Gimbals',
+        name: 'Teledyne FLIR (Thermal IR & Radiometric)',
+        products: 'FLIR Boson+, Hadron 640R (Dual 640×512 Thermal IR + 64MP EO RGB) & Vue TZ20-R UAV Thermal Cameras',
+        url: 'https://www.flir.com/suas/',
+        featured: true
+      },
+      {
+        category: 'Cameras & Gimbals',
+        name: 'RunCam (Night Starlight, B/W & Color)',
+        products: 'Night Eagle 3 Pro (Ultra-Low-Light 11390mV/Lux-sec B/W Monochrome Night Camera), Phoenix 2 Color & Split 4K',
+        url: 'https://shop.runcam.com/'
+      },
+      {
+        category: 'Cameras & Gimbals',
+        name: 'Sony Semiconductor / Alpha Drone Payloads',
+        products: 'Sony ILX-LR1 (61MP Full-Frame UAV Photogrammetry Camera), IMX296/IMX264 Global-Shutter B/W & Color VIO Sensors',
+        url: 'https://pro.sony/'
+      },
+      {
+        category: 'Cameras & Gimbals',
+        name: 'SIYI Technology (EO/IR Gimbals)',
+        products: 'ZT30 (Quad-Sensor 4K 30× Optical Zoom + 640 Thermal + Laser Rangefinder), ZT6, A8 Mini & ZR10 3-Axis Gimbals',
+        url: 'https://siyi.biz/en/',
+        featured: true
+      },
+      {
+        category: 'Cameras & Gimbals',
+        name: 'Gremsy (Industrial MAVLink Gimbals)',
+        products: 'Vio F1 (EO/IR + LRF Zoom Payload), Pixy U, T3V3 & Mio MAVLink/PX4 Quick-Release Camera Gimbals',
+        url: 'https://gremsy.com/'
+      },
+      {
+        category: 'Cameras & Gimbals',
+        name: 'NextVision Stabilized Systems',
+        products: 'NightHawk2-UZ, DragonEye2 & Raptor Micro-Stabilized Long-Range Day EO / Cooled & Uncooled Thermal IR Gimbals',
+        url: 'https://www.nextvision-sys.com/'
+      },
+      {
+        category: 'Cameras & Gimbals',
+        name: 'InfiRay / NocPix (Thermal Cores)',
+        products: 'Micro III 384/640 & Mini2 256/384 (20g Ultra-Light Uncooled VOx LWIR Thermal Camera Cores for VTOLs)',
+        url: 'https://www.infiray.com/'
+      },
+      {
+        category: 'Cameras & Gimbals',
+        name: 'Viewpro UAV Gimbals',
+        products: 'Q30T Pro, U30TIR & Z40K Dual/Triple-Sensor Optical Zoom + Thermal Tracking + Laser Rangefinder Gimbals',
+        url: 'https://www.viewprouav.com/'
+      },
+      {
+        category: 'Cameras & Gimbals',
+        name: 'ids / Basler / Arducam (B/W & Global Shutter)',
+        products: 'OV9281 / OG02B10 Monochrome B/W Global-Shutter MIPI/USB3 Cameras for VIO, AprilTag Landing & Machine Vision',
+        url: 'https://www.arducam.com/'
+      },
+      // Drone Kits & VTOL Airframes
+      {
+        category: 'Drone Kits & Airframes',
+        name: 'Holybro (PX4 Development Drone Kits)',
+        products: 'PX4 Vision Autonomy Dev Kit, X500 V2 ARF/PNP Carbon Fiber Quad Kit, S500 V2 & QAV250 Complete PX4/ArduPilot Drone Kits',
+        url: 'https://holybro.com/collections/multicopter-kit',
+        featured: true
+      },
+      {
+        category: 'Drone Kits & Airframes',
+        name: 'Foxtech FPV / Foxtech UAV',
+        products: 'Babyshark 260, Ayers, Nimbus VTOL, Great Shark 330 & Rhea 160 Composite Kevlar/Carbon QuadPlane Airframe Kits',
+        url: 'https://www.foxtechfpv.com/',
+        featured: true
+      },
+      {
+        category: 'Drone Kits & Airframes',
+        name: 'Yangda Security / UAV',
+        products: 'Skywhale, YD-A22 & Walker-2400 Heavy-Lift Carbon-Fiber Lift-and-Cruise Fixed-Wing VTOL Kits',
+        url: 'https://www.yangdaonline.com/'
+      },
+      {
+        category: 'Drone Kits & Airframes',
+        name: 'HeeWing RC / Ranger Series',
+        products: 'HeeWing T1 Ranger VTOL, T2 Cruza & F-01 Compact Modular Tilt-Rotor / QuadPlane PNP Kits',
+        url: 'https://www.heewing.com/'
+      },
+      {
+        category: 'Drone Kits & Airframes',
+        name: 'VolantexRC / Phoenix / Ranger',
+        products: 'Ranger 2000, Ranger 2400 & Phoenix 2400 EPO Airframe Kits for QuadPlane Conversion & SITL Validation',
+        url: 'https://www.volantexrc.com/'
+      },
+      {
+        category: 'Drone Kits & Airframes',
+        name: 'Titan Dynamics / Eclipson 3D',
+        products: '3D-Printable LW-PLA Fixed-Wing & VTOL Reference Airframe STL Designs (Falcon, Sovereign, Model Z)',
+        url: 'https://www.titandynamics.org/'
+      },
+      // Drone Power Modules, Wiring Harnesses & Connectors
+      {
+        category: 'Power, Wiring & Connectors',
+        name: 'Holybro (Power Modules, PDBs & JST-GH Wiring)',
+        products: 'PM02D / PM03D Digital I2C Power Modules, PM06 / PM07 High-Current PDBs, DroneCAN Power Modules & Pixhawk JST-GH Cable Kits',
+        url: 'https://holybro.com/collections/power-modules-pdbs',
+        featured: true
+      },
+      {
+        category: 'Power, Wiring & Connectors',
+        name: 'Amass Electronics (High-Current Connectors)',
+        products: 'XT60PW, XT90-S (Anti-Spark), AS150U, MR30/MT60 (3-Phase Motor Boom Plugs) & XT30 Gold-Plated Connectors',
+        url: 'http://www.china-amass.com/',
+        featured: true
+      },
+      {
+        category: 'Power, Wiring & Connectors',
+        name: 'Mauch Electronic (Hall-Effect Power Modules)',
+        products: 'Mauch HS-200-HV (200A 4S–14S Hall Sensor), PL-Sensor & Dual BEC Redundant Power Supplies for Pixhawk/Cube',
+        url: 'https://www.mauch-electronic.com/',
+        featured: true
+      },
+      {
+        category: 'Power, Wiring & Connectors',
+        name: 'JST / Molex (Drone Standard Harnesses)',
+        products: 'JST-GH 1.25mm Positive-Lock Pixhawk Standard Connectors (4/6/8/10-Pin) & Molex Clik-Mate 2.0mm DroneCAN Plugs',
+        url: 'https://www.jst.com/'
+      },
+      {
+        category: 'Power, Wiring & Connectors',
+        name: 'Alpha Wire / BNTECHGO (Silicone Wire)',
+        products: 'Ultra-Flexible 200°C Tinned-Copper Silicone Wire (8/10/12/14/16 AWG Power & 22/26 AWG Twisted Servo/CAN)',
+        url: 'https://www.alphawire.com/'
+      },
+      {
+        category: 'Power, Wiring & Connectors',
+        name: 'Castle Creations (High-Output BECs)',
+        products: 'CC BEC 2.0 Waterproof (14A Peak, 4.75V–12V Adjustable) & CC BEC Pro 20A for High-Torque VTOL Wing Servos',
+        url: 'https://www.castlecreations.com/'
+      },
+      {
+        category: 'Power, Wiring & Connectors',
+        name: 'Lemo / Fischer Connectors',
+        products: 'IP68 Push-Pull Circular Quick-Disconnect Wing-to-Fuselage & External Payload Pod Harnesses',
+        url: 'https://www.lemo.com/'
+      },
+      // CATEGORY 17: Parachute & Ballistic Safety Recovery Systems
+      {
+        category: 'Parachute & Safety Recovery',
+        name: 'ParaZero Drone Safety Systems',
+        products: 'SafeAir Pyrotechnic & Mechanical Autonomous Ballistic Parachute Recovery Systems (ASTM F3322 Operations Over People)',
+        url: 'https://parazero.com/',
+        featured: true
+      },
+      {
+        category: 'Parachute & Safety Recovery',
+        name: 'Mars Parachutes / Fruity Chutes',
+        products: 'Iris Ultra Compact Annular & Cruciform UAV Recovery Parachutes, CO2 / Spring Canister Ejectors & Auto-Triggers (2–50kg MTOW)',
+        url: 'https://fruitychutes.com/',
+        featured: true
+      },
+      {
+        category: 'Parachute & Safety Recovery',
+        name: 'Galaxy GRS (Ballistic Rescue Systems)',
+        products: 'Galaxy GRS Fast-Opening Ballistic Parachutes for Heavy Fixed-Wing VTOLs & Unmanned Cargo Aircraft',
+        url: 'https://www.galaxy-rs.cz/'
+      },
+      {
+        category: 'Parachute & Safety Recovery',
+        name: 'AVSS (Aerial Vehicle Safety Solutions)',
+        products: 'PRS-M300 / PRS-M350 ASTM-Compliant Parachute Recovery & Flight Termination Systems (FTS)',
+        url: 'https://www.avss.co/'
+      },
+      // CATEGORY 18: Airborne Generators, Hybrid-Electric & Fuel Cells
+      {
+        category: 'Airborne Generators & Hybrid Power',
+        name: 'Currawong Engineering',
+        products: 'Corvid-29 / Corvid-50 Electronic Fuel Injection (EFI) 2-Stroke UAV Engines & Integrated Starter-Alternators',
+        url: 'https://currawong.aero/',
+        featured: true
+      },
+      {
+        category: 'Airborne Generators & Hybrid Power',
+        name: 'Intelligent Energy (Hydrogen UAV Fuel Cells)',
+        products: 'IE-SOAR 800W–2.4kW Lightweight Proton Exchange Membrane (PEM) Hydrogen Fuel Cell Power Modules for Multi-Hour VTOLs',
+        url: 'https://www.intelligent-energy.com/',
+        featured: true
+      },
+      {
+        category: 'Airborne Generators & Hybrid Power',
+        name: 'Pegasus Aeronautics / SkyPower',
+        products: 'GE-70 & SP-55 FI Series Hybrid-Electric Range Extender Generators (2kW–5kW) for Heavy-Lift QuadPlanes',
+        url: 'https://pegasusaero.ca/'
+      },
+      {
+        category: 'Airborne Generators & Hybrid Power',
+        name: 'HFE International (UAV Heavy Fuel & EFI)',
+        products: 'GenPod & Heavy-Fuel (JP-8 / Jet-A) EFI Propulsion and Onboard Generator Systems for Long-Range VTOLs',
+        url: 'https://www.hfeinternational.com/'
+      },
+      // CATEGORY 19: GCS Hardware, Antenna Trackers & Directional Antennas
+      {
+        category: 'GCS Hardware & Antennas',
+        name: 'uAvionix (ADS-B, Remote ID & C2)',
+        products: 'pingRX Pro, ping200X Mode S/ADS-B Transponders, truFYX SBAS GPS & pingRID NDAA Remote ID Modules',
+        url: 'https://uavionix.com/',
+        featured: true
+      },
+      {
+        category: 'GCS Hardware & Antennas',
+        name: 'TrueRC Canada / VAS (Video Antenna Systems)',
+        products: 'X-Air, Singularity, Matchstick & Crosshair Circularly Polarized High-Gain Directional & Omni UAV Antennas',
+        url: 'https://www.truerc.ca/'
+      },
+      {
+        category: 'GCS Hardware & Antennas',
+        name: 'Panorama Antennas / Southwest Antennas',
+        products: 'Ruggedized MIMO Directional Sector, Omni & Tracking Base-Station Antennas (900MHz / L-Band / S-Band / C-Band)',
+        url: 'https://www.southwestantennas.com/'
+      },
+      {
+        category: 'GCS Hardware & Antennas',
+        name: 'Getac / Panasonic Toughbook',
+        products: 'Sunlight-Readable MIL-STD-810H IP66 Rugged Field Tablets & Laptops for QGroundControl & Mission Planner GCS',
+        url: 'https://www.getac.com/'
+      },
+      // CATEGORY 20: Carbon Spars, 3D Print Filaments & Payload Release Winches
+      {
+        category: 'Carbon Tubes, Filaments & Release Winches',
+        name: 'RockWest Composites / DragonPlate',
+        products: 'Roll-Wrapped 3K Twill Carbon Fiber Main Spar & Boom Tubes (Ø16–25mm), Pultruded Strips & CNC Gussets',
+        url: 'https://www.rockwestcomposites.com/',
+        featured: true
+      },
+      {
+        category: 'Carbon Tubes, Filaments & Release Winches',
+        name: 'ColorFabb / Polymaker / Bambu (3D Aero Filaments)',
+        products: 'ColorFabb LW-PLA & LW-ASA (Active Foaming Wing Skins), Polymaker Polylite LW-PLA, PA6-CF & PETG-CF Structural Filaments',
+        url: 'https://colorfabb.com/',
+        featured: true
+      },
+      {
+        category: 'Carbon Tubes, Filaments & Release Winches',
+        name: 'Zubax Robotics (Electro-Permanent Magnets)',
+        products: 'FluxGrip FG40 / NicaDrone EPM688 Electro-Permanent Magnetic Cargo Release Latches (Zero Steady-State Power Draw)',
+        url: 'https://zubax.com/'
+      },
+      {
+        category: 'Carbon Tubes, Filaments & Release Winches',
+        name: 'A2Z Drone Delivery (Tethered Delivery Winches)',
+        products: 'RDS2 & RDSX Commercial Autonomous UAV Delivery Winches with Auto-Release Hook & Anti-Pendulum Control',
+        url: 'https://www.a2zdronedelivery.com/'
+      }
+    ];
+
+    let activeSupplierCategory = 'ALL';
+    let customSuppliers = [];
+
+    function loadSavedSuppliers() {
+      try {
+        const raw = localStorage.getItem('aero_vtol_custom_suppliers');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) customSuppliers = parsed;
+        }
+      } catch (e) {
+        customSuppliers = [];
+      }
+    }
+
+    function saveCustomSuppliers() {
+      try {
+        localStorage.setItem('aero_vtol_custom_suppliers', JSON.stringify(customSuppliers));
+      } catch (e) {}
+    }
+
+    function getAllSuppliers() {
+      return [
+        ...DEFAULT_SUPPLIERS.map((s) => ({ ...s, isCustom: false })),
+        ...customSuppliers.map((s, idx) => ({ ...s, isCustom: true, custIdx: idx }))
+      ];
+    }
+
+    function setSupplierFilter(category) {
+      activeSupplierCategory = category;
+      document.querySelectorAll('.sup-filter-btn').forEach((btn) => {
+        const isMatch = btn.getAttribute('data-cat') === category;
+        btn.className = isMatch
+          ? 'sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-sky-600 text-white transition'
+          : 'sup-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 hover:border-sky-500/50 transition';
+      });
+      renderSuppliersTable();
+    }
+
+    function renderSuppliersTable() {
+      const tbody = document.getElementById('suppliersTableBody');
+      if (!tbody) return;
+      const query = (document.getElementById('supplierSearchInput')?.value || '').trim().toLowerCase();
+      const all = getAllSuppliers();
+
+      const filtered = all.filter((s) => {
+        const catMatch = activeSupplierCategory === 'ALL' || s.category === activeSupplierCategory;
+        const qMatch = !query ||
+          s.name.toLowerCase().includes(query) ||
+          s.products.toLowerCase().includes(query) ||
+          s.category.toLowerCase().includes(query) ||
+          s.url.toLowerCase().includes(query);
+        return catMatch && qMatch;
+      });
+
+      const countBadge = document.getElementById('supplierCountBadge');
+      if (countBadge) {
+        countBadge.textContent = `${filtered.length} / ${all.length} Suppliers Shown`;
+      }
+
+      const categoryColors = {
+        'Flight Controllers': 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+        'Companion SBCs': 'bg-teal-500/15 text-teal-300 border-teal-500/30',
+        'ESCs': 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+        'Motors': 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+        'Propellers': 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+        'Batteries': 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+        'Sensors': 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+        'GPS / GNSS': 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30',
+        'Telemetry Radios': 'bg-blue-500/15 text-blue-300 border-blue-500/30',
+        'FPV Systems': 'bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/30',
+        'RC Transmitters & Receivers': 'bg-lime-500/15 text-lime-300 border-lime-500/30',
+        'Servos & Actuators': 'bg-orange-500/15 text-orange-300 border-orange-500/30',
+        'LiDAR Scanners': 'bg-violet-500/15 text-violet-300 border-violet-500/30',
+        'Cameras & Gimbals': 'bg-pink-500/15 text-pink-300 border-pink-500/30',
+        'Drone Kits & Airframes': 'bg-emerald-500/15 text-emerald-200 border-emerald-500/30',
+        'Power, Wiring & Connectors': 'bg-yellow-500/15 text-yellow-300 border-yellow-500/30',
+        'Parachute & Safety Recovery': 'bg-red-500/15 text-red-300 border-red-500/30',
+        'Airborne Generators & Hybrid Power': 'bg-amber-600/15 text-amber-200 border-amber-600/30',
+        'GCS Hardware & Antennas': 'bg-blue-600/15 text-blue-200 border-blue-600/30',
+        'Carbon Tubes, Filaments & Release Winches': 'bg-emerald-600/15 text-emerald-200 border-emerald-600/30'
+      };
+
+      tbody.innerHTML = filtered.map((s) => {
+        const badgeCls = categoryColors[s.category] || 'bg-slate-800 text-slate-300 border-slate-700';
+        const featuredTag = s.featured
+          ? `<span class="ml-1.5 text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">FEATURED</span>`
+          : s.isCustom
+            ? `<span class="ml-1.5 text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">CUSTOM</span>`
+            : '';
+        const actionCell = s.isCustom
+          ? `<button type="button" onclick="removeCustomSupplier(${s.custIdx})" class="text-rose-400 hover:text-rose-300 font-mono text-[11px] underline">Remove</button>`
+          : `<span class="text-slate-500 font-mono text-[11px]">Verified</span>`;
+
+        return `
+          <tr class="hover:bg-slate-800/40">
+            <td class="py-2.5 px-3.5 whitespace-nowrap">
+              <span class="px-2 py-0.5 rounded-md border font-mono text-[11px] ${badgeCls}">${escapeHtml(s.category)}</span>
+            </td>
+            <td class="py-2.5 px-3.5 font-bold text-white whitespace-nowrap">${escapeHtml(s.name)}${featuredTag}</td>
+            <td class="py-2.5 px-3.5 text-slate-300">${escapeHtml(s.products)}</td>
+            <td class="py-2.5 px-3.5 font-mono whitespace-nowrap">
+              <a href="${escapeHtml(s.url)}" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 underline">${escapeHtml(s.url)}</a>
+            </td>
+            <td class="py-2.5 px-3.5 text-right no-print">${actionCell}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function addCustomSupplier() {
+      const category = document.getElementById('newSupCategory')?.value || 'Sensors';
+      const name = (document.getElementById('newSupName')?.value || '').trim();
+      const products = (document.getElementById('newSupProducts')?.value || '').trim();
+      let url = (document.getElementById('newSupUrl')?.value || '').trim();
+      const msgEl = document.getElementById('supplierFeedbackMsg');
+
+      if (!name || !products) {
+        if (msgEl) {
+          msgEl.textContent = 'Please enter both a Supplier Name and Supported Models / Specialty.';
+          msgEl.className = 'text-[11px] font-mono text-amber-400';
+          msgEl.classList.remove('hidden');
+        }
+        return;
+      }
+      if (!url) {
+        url = 'https://';
+      } else if (!/^https?:\/\//i.test(url)) {
+        url = 'https://' + url;
+      }
+
+      customSuppliers.push({ category, name, products, url });
+      saveCustomSuppliers();
+      renderSuppliersTable();
+
+      document.getElementById('newSupName').value = '';
+      document.getElementById('newSupProducts').value = '';
+      document.getElementById('newSupUrl').value = '';
+
+      if (msgEl) {
+        msgEl.textContent = `Added "${name}" under ${category} and saved to local directory.`;
+        msgEl.className = 'text-[11px] font-mono text-emerald-400';
+        msgEl.classList.remove('hidden');
+      }
+    }
+
+    function removeCustomSupplier(idx) {
+      if (idx >= 0 && idx < customSuppliers.length) {
+        customSuppliers.splice(idx, 1);
+        saveCustomSuppliers();
+        renderSuppliersTable();
+      }
+    }
+
+    function resetCustomSuppliers() {
+      customSuppliers = [];
+      saveCustomSuppliers();
+      renderSuppliersTable();
+      const msgEl = document.getElementById('supplierFeedbackMsg');
+      if (msgEl) {
+        msgEl.textContent = 'Cleared custom suppliers and restored default verified vendor list.';
+        msgEl.className = 'text-[11px] font-mono text-sky-400';
+        msgEl.classList.remove('hidden');
+      }
+    }
+
+    function exportSuppliersCsv() {
+      const NL = String.fromCharCode(10);
+      const rows = [
+        ['Category', 'Supplier Name', 'Flagship Components & Models', 'Website URL', 'Source'],
+        ...getAllSuppliers().map((s) => [s.category, s.name, s.products, s.url, s.isCustom ? 'User Custom' : 'Verified Standard'])
+      ];
+      const csv = rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(',')).join(NL);
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'AERO_VTOL_Approved_Component_Suppliers.csv';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 250);
+    }
+
+    function downloadThisHtmlManual() {
+      const NL = String.fromCharCode(10);
+      const htmlContent = '\x3C!DOCTYPE html>' + NL + document.documentElement.outerHTML;
+      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'AERO_VTOL_Operators_Manual_Dark.html';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 250);
+    }
+
+    function downloadMarkdownManual() {
+      const NL = String.fromCharCode(10);
+      const supplierLines = getAllSuppliers().map((s) => `| ${s.category} | **${s.name}** | ${s.products} | ${s.url} |`);
+      const md = [
+        '# AERO-VTOL QuadPlane Studio — Operator’s Manual & Technical Reference Guide',
+        '',
+        '**Document ID:** `AERO-VTOL-MAN-2026-REV5`',
+        '**Target Platform:** Fixed-Wing Lift-and-Cruise VTOL (QuadPlane & Coaxial Octo-QuadPlane)',
+        '**Target 3D Printer:** Anycubic Kobra S1 Max (350 x 350 x 350 mm Build Volume)',
+        '**Autopilot Compatibility:** PX4 Autopilot v1.14 – v1.17+ (`SYS_AUTOSTART 13000`)',
+        '',
+        '## Approved Drone Component Suppliers Directory (20 Categories)',
+        '',
+        '| Category | Supplier / Brand | Flagship QuadPlane Components & Models | Website |',
+        '| --- | --- | --- | --- |',
+        ...supplierLines
+      ].join(NL);
+      const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'AERO_VTOL_Operators_Manual.md';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 250);
+    }
+
+    function toggleManualTheme() {
+      const html = document.documentElement;
+      const isLight = html.classList.toggle('light-theme');
+      document.getElementById('themeIcon').textContent = isLight ? '🌙' : '☀️';
+      document.getElementById('themeText').textContent = isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+    }
+
+    function updateChecklist() {
+      const boxes = document.querySelectorAll('#checklistContainer input[type="checkbox"]');
+      const checked = Array.from(boxes).filter((b) => b.checked).length;
+      const badge = document.getElementById('checklistProgress');
+      badge.textContent = `${checked} / ${boxes.length} Verified`;
+      badge.className = checked === boxes.length
+        ? 'text-xs font-mono px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 font-bold'
+        : 'text-xs font-mono px-3 py-1 rounded-lg bg-slate-950 border border-slate-800 text-sky-300';
+    }
+
+    function initManual() {
+      loadSavedSuppliers();
+      renderSuppliersTable();
+    }
+
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', initManual);
+    } else {
+      initManual();
+    }
+
+    Object.assign(window, {
+      setSupplierFilter,
+      renderSuppliersTable,
+      addCustomSupplier,
+      removeCustomSupplier,
+      resetCustomSuppliers,
+      exportSuppliersCsv,
+      downloadThisHtmlManual,
+      downloadMarkdownManual,
+      toggleManualTheme,
+      updateChecklist
+    });
+  </script>
+</body>
+</html>
